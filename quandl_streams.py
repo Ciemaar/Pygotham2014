@@ -1,4 +1,4 @@
-from simple_files import FileHolder
+from holders import AbstractBaseHolder, BaseHolder
 
 __author__ = 'andriod'
 
@@ -22,6 +22,9 @@ class QuandlAsset(object):
         """
         return getattr(self.value, item)
 
+    def __getitem__(self, key):
+        return self.value[key]
+
     def __len__(self):
         return len(self.value)
 
@@ -33,17 +36,19 @@ class QuandlAsset(object):
         return self._value
 
 
-def get_live(coll_name, sys_coll=None):
-    if coll_name == 'market2':
-        coll = FileHolder('market1')
-        coll.etf.usd_eur = QuandlAsset("GOOG/NYSE_ERO")
-        coll.fx.usd_jpy = QuandlAsset("QUANDL/USDJPY")
-    elif coll_name == 'market3' and sys_coll is not None:
-        coll = FileHolder('market1')
-        for name, code in sys_coll.quandlFXCodes.items():
-            asset = QuandlAsset(code)
-            coll.fx[name] = asset
+class QuandlHolder(AbstractBaseHolder):
+    def __init__(self, name_map, name, *prev_path):
+        super(QuandlHolder, self).__init__(name, *prev_path)
+        self.name_map = name_map
 
+    def create_sub_obj(self, item):
+        return QuandlAsset(self.name_map[item])
+
+
+def get_live(sys_coll):
+    coll = BaseHolder(sys_coll, "market")
+    if hasattr(sys_coll,'quandlFXCodes'):
+        coll.fx = QuandlHolder(sys_coll.quandlFXCodes, "fx", (coll,))
     return coll
 
 
@@ -60,8 +65,7 @@ def search_quandl(query, authtoken=None):
 
 def name_to_code(query='USD', authtoken=None):
     quandlAll = search_quandl(query, authtoken)
-    return {"%s_%s" % (curve['code'][7:10].lower(), curve['code'][10:].lower()): curve['code'] for curve in
-            quandlAll}
+    return {"%s_%s" % (curve['code'][7:10].lower(), curve['code'][10:].lower()): curve['code'] for curve in quandlAll}
 
 
 def dl_quandl(query="USD", authtoken=None):
@@ -80,5 +84,5 @@ if __name__ == "__main__":
     print(test.Close['2009-05-14'])
 
     dl_quandl("USD")
-    #dl_quandl("EUR")
+    # dl_quandl("EUR")
 
