@@ -1,2 +1,2 @@
-curve,quantity,cost
-usd_eur,100,100
+position_id,instrument,quantity,cost,start_date,end_date
+1,eur,100,100,2009-5-2,
