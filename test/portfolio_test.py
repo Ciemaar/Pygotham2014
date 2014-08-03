@@ -19,14 +19,19 @@ class PortfolioTestCase(unittest.TestCase):
         assert len(self.portfolio.retirement)
 
     def test_cost(self):
-        assert self.portfolio.retirement.cost.sum() == 100
+        assert self.portfolio.retirement.cost.sum() == 200
 
     def test_price(self):
         value = 0
         for name, row in self.portfolio.retirement.iterrows():
-            spot_rate = self.market.fx['_'.join((self.model.config['base_ccy'], row['instrument']))].Rate['2010-5-14']
+            if row['instrument_type'] == 'fx':
+                spot_rate = self.market.fx['_'.join((self.model.config['base_ccy'], row['instrument']))].Rate['2010-5-14']
+            elif row['instrument_type'] == 'stock':
+                market_data = self.market.stock[row['instrument']]
+                md_panda = market_data.value
+                spot_rate = md_panda.Close['2010-5-14']
             value += spot_rate*row['quantity']
-        self.assertAlmostEqual(value, 79.2615)
+        self.assertAlmostEqual(value, 25461.2615)
 
 
 if __name__ == '__main__':

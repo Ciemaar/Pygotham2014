@@ -7,7 +7,7 @@ __author__ = 'andriod'
 
 class AbstractBaseHolder(MutableMapping, object):
     next_type = None
-    instance_vars = ['instance_vars', 'yaml_dict', 'next_type']
+    _instance_vars = ['yaml_dict', 'next_type']
 
     def __init__(self, name, *prev_path):
         self.name = name
@@ -34,7 +34,7 @@ class AbstractBaseHolder(MutableMapping, object):
         :type item: str - attribute requested
         :return: :raise AttributeError:
         """
-        if item not in self.instance_vars and not item[0] == "_":
+        if item not in self._instance_vars and not item[0] == "_":
             return self[item]
         else:
             raise AttributeError

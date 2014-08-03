@@ -37,34 +37,43 @@ class QuandlAsset(object):
 
 
 class QuandlHolder(AbstractBaseHolder):
-    def __init__(self, name_map, name, *prev_path):
+    _instance_vars = AbstractBaseHolder._instance_vars + ['prefix','authtoken']
+    def __init__(self, name_map_or_prefix, name, *prev_path):
         super(QuandlHolder, self).__init__(name, *prev_path)
-        self.name_map = name_map
+        if isinstance(name_map_or_prefix, basestring):
+            self.prefix = name_map_or_prefix
+        else:
+            self.name_map = name_map_or_prefix
+        self.authtoken=None
 
     def create_sub_obj(self, item):
-        return QuandlAsset(self.name_map[item])
+        if getattr(self, 'prefix', None):
+            return QuandlAsset(self.prefix+item, authtoken=self.authtoken)
+        else:
+            return QuandlAsset(self.name_map[item], authtoken=self.authtoken)
 
 
-def get_live(sys_coll):
+def get_live(sys_coll, authtoken=None):
     coll = BaseHolder(sys_coll, "market")
-    if hasattr(sys_coll,'quandlFXCodes'):
+    if hasattr(sys_coll, 'quandlFXCodes'):
         coll.fx = QuandlHolder(sys_coll.quandlFXCodes, "fx", (coll,))
+    coll.stock = QuandlHolder('WIKI/', "stock", (coll,))
     return coll
 
 
-def search_quandl(query, authtoken=None):
+def search_quandl(query, source="QUANDL", authtoken=None):
     currPage = True
     quandlAll = []
     pageNo = 0
     while currPage:
-        currPage = Quandl.search(query, source="QUANDL", prints=False, page=pageNo, authtoken=authtoken)
+        currPage = Quandl.search(query, source=source, prints=False, page=pageNo, authtoken=authtoken)
         quandlAll.append(currPage)
         pageNo += 1
     return chain(*quandlAll)
 
 
-def name_to_code(query='USD', authtoken=None):
-    quandlAll = search_quandl(query, authtoken)
+def name_to_code(query='USD', source="QUANDL", authtoken=None):
+    quandlAll = search_quandl(query, source=source, authtoken=authtoken)
     return {"%s_%s" % (curve['code'][7:10].lower(), curve['code'][10:].lower()): curve['code'] for curve in quandlAll}
 
 

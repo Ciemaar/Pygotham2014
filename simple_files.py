@@ -11,7 +11,7 @@ __author__ = 'andriod'
 
 
 class FileHolder(AbstractBaseHolder):
-    instance_vars = ['instance_vars', 'yaml_dict', 'file_path']
+    _instance_vars = ['_instance_vars', 'yaml_dict', 'file_path']
 
     def __init__(self, name, *prev_path):
         """FileHolders hold a section of the data and are matched in the file system with a matching directory or file
