@@ -1,4 +1,5 @@
 from data_access import get_file
+from pricing import price_fund
 from quandl_streams import get_live
 from simple_files import FileHolder
 
@@ -22,13 +23,7 @@ class PortfolioTestCase(unittest.TestCase):
         assert self.portfolio.retirement.cost.sum() == 200
 
     def test_price(self):
-        value = 0
-        for name, row in self.portfolio.retirement.iterrows():
-            if row['instrument_type'] == 'fx':
-                spot_rate = self.market.fx['_'.join((self.model.config['base_ccy'], row['instrument']))].Rate['2010-5-14']
-            elif row['instrument_type'] == 'stock':
-                spot_rate = (self.market.stock[row['instrument']]).Close['2010-5-14']
-            value += spot_rate*row['quantity']
+        value = price_fund(self.portfolio.retirement, self.market, self.model, '2010-5-14')
         self.assertAlmostEqual(value, 25461.2615)
 
 
