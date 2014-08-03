@@ -13,7 +13,7 @@ class PortfolioTestCase(unittest.TestCase):
     def setUp(self):
         self.portfolio = FileHolder('portfolio')
         self.model = FileHolder('model')
-        self.market = get_live(get_file("sys"))
+        self.market = get_live(get_file("sys"), self.model)
 
     def test_portfolio_access(self):
         assert len(self.portfolio.retirement)
@@ -27,9 +27,7 @@ class PortfolioTestCase(unittest.TestCase):
             if row['instrument_type'] == 'fx':
                 spot_rate = self.market.fx['_'.join((self.model.config['base_ccy'], row['instrument']))].Rate['2010-5-14']
             elif row['instrument_type'] == 'stock':
-                market_data = self.market.stock[row['instrument']]
-                md_panda = market_data.value
-                spot_rate = md_panda.Close['2010-5-14']
+                spot_rate = (self.market.stock[row['instrument']]).Close['2010-5-14']
             value += spot_rate*row['quantity']
         self.assertAlmostEqual(value, 25461.2615)
 

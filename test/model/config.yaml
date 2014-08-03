@@ -1,3 +1,4 @@
 {
-  base_ccy: usd
+  base_ccy: usd,
+  start_date: 2009-01-01
 }
