@@ -6,6 +6,11 @@ __author__ = 'andriod'
 pricers = {}
 
 def pricer(func):
+    """Decorator to register a pricer function
+
+    :param func: a pricer function named xxx_yyy where yyy is the instrument_type to price, xxx is ignored
+    :return: the same pricer function
+    """
     global  pricers
     _, name = func.__name__.split('_')
     pricers[name] = func
