@@ -24,6 +24,8 @@ class PortfolioTestCase(unittest.TestCase):
     def test_price(self):
         value = price_fund(self.portfolio.retirement, self.market, self.model, '2010-5-14')
         self.assertAlmostEqual(value, 25461.2615)
+        self.assertAlmostEqual(self.portfolio.retirement.price(self.market, self.model, '2010-5-14'), 25461.2615)
+
 
     def test_start_date(self):
         min_date = self.portfolio.retirement.start_date
