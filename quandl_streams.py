@@ -1,9 +1,14 @@
+import os.path
+from itertools import chain
+
+import Quandl
+from pandas.core.frame import DataFrame
+
 from holders import AbstractBaseHolder, BaseHolder
+
 
 __author__ = 'andriod'
 
-from itertools import chain
-import Quandl
 
 
 class QuandlAsset(object):
@@ -32,9 +37,13 @@ class QuandlAsset(object):
 
     @property
     def value(self):
-        if self._value is not None:
-            return self._value
-        self._value = Quandl.get(self.quandl_name, authtoken=self._authtoken, **self.kwargs)
+        if self._value is None:
+            cache_path = os.path.join("quandl_cache", self.quandl_name+".csv")
+            if os.path.exists(cache_path):
+                self._value = DataFrame.from_csv(cache_path)
+            else:
+                self._value = Quandl.get(self.quandl_name, authtoken=self._authtoken, **self.kwargs)
+                self._value.to_csv(cache_path)
         return self._value
 
 
