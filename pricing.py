@@ -1,5 +1,9 @@
+import logging
+log = logging.getLogger(__name__)
+
 from decimal import Decimal
 from string import split
+from Quandl.Quandl import DatasetNotFound
 
 __author__ = 'andriod'
 
@@ -25,4 +29,12 @@ def price_stock(holding, market, model, cob_date):
     return (market.stock[holding['instrument']]).Close[cob_date] * holding['quantity']
 
 def price_fund(fund, market, model, cob_date):
-    return sum(pricers[row['instrument_type']](row, market, model, cob_date) for name, row in fund.iterrows())
+    ret = 0
+    for name, row in fund.iterrows():
+        # if row['position_id'][0] == '#':
+        #     continue
+        try:
+            ret += pricers[row['instrument_type']](row, market, model, cob_date)
+        except DatasetNotFound:
+            log.exception("Skipping position %s %s:%s",(name,row['instrument_type'],row['instrument']))
+    return ret

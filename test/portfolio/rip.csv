@@ -1,0 +1,9 @@
+position_id,instrument_type,instrument,quantity,cost,start_date,end_date
+1,stock,SCI,23.84,,2013-03-08
+2,stock,MATW,17.39,,2013-03-08
+3,stock,CSV,11.80,,2013-03-08
+4,stock,HI,11.01,,2013-03-08
+5,stock,CHE,27.11,,2013-03-08
+6,stock,GTIV,6.28,,2013-03-08
+7,stock,BIOS,1.30,,2013-03-08
+8,stock,AMED,1.27,,2013-03-08
