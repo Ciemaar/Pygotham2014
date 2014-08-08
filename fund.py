@@ -5,9 +5,9 @@ from simple_files import FileHolder
 __author__ = 'andriod'
 
 
-class Portfolio(object):
+class Fund(object):
     def __init__(self, components):
-        super(Portfolio, self).__init__()
+        super(Fund, self).__init__()
         self.components = components
 
     def __getattr__(self, item):
@@ -29,12 +29,12 @@ class Portfolio(object):
         return price_fund(self.components, market, model, cob_date)
 
 
-class PortfolioHolder(FileHolder):
+class FundsHolder(FileHolder):
     def create_sub_obj(self, item):
-        ret = super(PortfolioHolder, self).create_sub_obj(item)
+        ret = super(FundsHolder, self).create_sub_obj(item)
         # ret = ret.T.append(pd.Series(ret.index.astype(str),ret.index, name='new_id')).T
 
-        return Portfolio(ret)
+        return Fund(ret)
 
     def __iter__(self):
         for key in os.listdir(self.file_path):
