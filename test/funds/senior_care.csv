@@ -3,7 +3,6 @@ position_id,instrument_type,instrument,quantity,cost,start_date,end_date
 2,stock,AVIV,1.97,,2012-01-12
 3,stock,BKD,1.59,,2012-01-12
 4,stock,CSU,1.45,,2012-01-12
-#5,stock,NVO,21.55,,2012-01-12
 6,stock,DVA,12.06,,2012-01-12
 7,stock,NXTM,1.69,,2012-01-12
 8,stock,RMTI,0.90,,2012-01-12
