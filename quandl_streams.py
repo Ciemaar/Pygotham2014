@@ -8,7 +8,7 @@ from holders import AbstractBaseHolder, BaseHolder
 
 
 __author__ = 'andriod'
-
+request_count = 0
 
 class QuandlAsset(object):
     def __init__(self, quandl_name, authtoken=None, **kwargs):
@@ -36,11 +36,14 @@ class QuandlAsset(object):
 
     @property
     def value(self):
+        global request_count
         if self._value is None:
             cache_path = os.path.join("quandl_cache", self.quandl_name + ".csv")
             if os.path.exists(cache_path):
                 self._value = DataFrame.from_csv(cache_path)
             else:
+                request_count+=1
+                print "Making quandl request %d"%request_count
                 self._value = Quandl.get(self.quandl_name, authtoken=self._authtoken, **self.kwargs)
                 self._value.to_csv(cache_path)
         return self._value

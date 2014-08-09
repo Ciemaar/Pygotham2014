@@ -1,7 +1,7 @@
 from pandas import date_range
 
 from data_access import get_file
-from portfolio import FundsHolder
+from fund import FundsHolder
 from pricing import price_fund
 from quandl_streams import get_live
 from simple_files import FileHolder
@@ -18,7 +18,7 @@ class FundsTestCase(unittest.TestCase):
         self.model = FileHolder('model')
         self.market = get_live(get_file("sys"), self.model)
 
-    def test_portfolio_access(self):
+    def test_fund_access(self):
         assert len(self.funds.retirement) == 2
 
     def test_cost(self):
