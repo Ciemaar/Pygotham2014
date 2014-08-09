@@ -10,7 +10,6 @@ from holders import AbstractBaseHolder, BaseHolder
 __author__ = 'andriod'
 
 
-
 class QuandlAsset(object):
     def __init__(self, quandl_name, authtoken=None, **kwargs):
         """Uses the Quandl service to get live data
@@ -38,7 +37,7 @@ class QuandlAsset(object):
     @property
     def value(self):
         if self._value is None:
-            cache_path = os.path.join("quandl_cache", self.quandl_name+".csv")
+            cache_path = os.path.join("quandl_cache", self.quandl_name + ".csv")
             if os.path.exists(cache_path):
                 self._value = DataFrame.from_csv(cache_path)
             else:
@@ -48,19 +47,20 @@ class QuandlAsset(object):
 
 
 class QuandlHolder(AbstractBaseHolder):
-    _instance_vars = AbstractBaseHolder._instance_vars + ['prefix','authtoken']
+    _instance_vars = AbstractBaseHolder._instance_vars + ['prefix', 'authtoken']
+
     def __init__(self, name_map_or_prefix, name, *prev_path, **kwargs):
         super(QuandlHolder, self).__init__(name, *prev_path)
         if isinstance(name_map_or_prefix, basestring):
             self.prefix = name_map_or_prefix
         else:
             self.name_map = name_map_or_prefix
-        self.authtoken=None
+        self.authtoken = None
         self.kwargs = kwargs
 
     def create_sub_obj(self, item):
         if getattr(self, 'prefix', None):
-            return QuandlAsset(self.prefix+item, authtoken=self.authtoken, **self.kwargs)
+            return QuandlAsset(self.prefix + item, authtoken=self.authtoken, **self.kwargs)
         else:
             return QuandlAsset(self.name_map[item], authtoken=self.authtoken, **self.kwargs)
 

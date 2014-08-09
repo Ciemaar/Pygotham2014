@@ -1,6 +1,3 @@
-from datetime import date
-from datetime import timedelta
-import dateutil
 from pandas import date_range
 
 from data_access import get_file
@@ -42,10 +39,12 @@ class FundsTestCase(unittest.TestCase):
             if sample_date.dayofweek >= 5:
                 continue
             try:
-                price_curve.append((sample_date,self.funds.retirement.price(self.market, self.model, sample_date.date())))
+                price_curve.append(
+                    (sample_date, self.funds.retirement.price(self.market, self.model, sample_date.date())))
             except KeyError:
-                print "unable to price for %s"%sample_date
-        self.assertEquals(len(price_curve),1321)
+                print "unable to price for %s" % sample_date
+        self.assertEquals(len(price_curve), 1321)
+
 
 if __name__ == '__main__':
     unittest.main()

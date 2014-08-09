@@ -1,7 +1,6 @@
 import os
 
 import pandas
-
 import yaml
 
 from holders import AbstractBaseHolder

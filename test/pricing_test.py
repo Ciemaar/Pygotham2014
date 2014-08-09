@@ -15,10 +15,9 @@ class PricingCase(unittest.TestCase):
         self.market = get_live(get_file("sys"), self.model)
 
     def test_price_all(self):
-        all_prices = [fund.price(self.market, self.model,'2014-05-14') for fund in self.funds]
+        all_prices = [fund.price(self.market, self.model, '2014-05-14') for fund in self.funds]
         assert len(all_prices) == 3
-        self.assertListEqual(all_prices,[4139.9243000000006, 4099.5227000000004, 59459.754800000002])
-
+        self.assertListEqual(all_prices, [4139.9243000000006, 4099.5227000000004, 59459.754800000002])
 
 
 if __name__ == '__main__':
