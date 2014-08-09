@@ -1,7 +1,7 @@
 import logging
-
 log = logging.getLogger(__name__)
 
+from quandl_streams import NoDataError
 from Quandl.Quandl import DatasetNotFound, CallLimitExceeded
 
 __author__ = 'andriod'
@@ -38,9 +38,11 @@ def price_fund(fund, market, model, cob_date):
         # continue
         try:
             ret += pricers[row['instrument_type']](row, market, model, cob_date)
+        except NoDataError:
+            log.exception("Skipping position %s %s:%s", name, row['instrument_type'], row['instrument'])
         except DatasetNotFound:
-            log.exception("Skipping position %s %s:%s", (name, row['instrument_type'], row['instrument']))
+            log.exception("Skipping position %s %s:%s", name, row['instrument_type'], row['instrument'])
         except CallLimitExceeded:
-            log.exception("Skipping position %s %s:%s", (name, row['instrument_type'], row['instrument']))
+            log.exception("Skipping position %s %s:%s", name, row['instrument_type'], row['instrument'])
 
     return ret

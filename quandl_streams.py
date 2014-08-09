@@ -1,7 +1,11 @@
+import logging
+log = logging.getLogger(__name__)
+
 import os.path
 from itertools import chain
 
 import Quandl
+from Quandl.Quandl import DatasetNotFound, CallLimitExceeded
 from pandas.core.frame import DataFrame
 
 from holders import AbstractBaseHolder, BaseHolder
@@ -9,6 +13,11 @@ from holders import AbstractBaseHolder, BaseHolder
 
 __author__ = 'andriod'
 request_count = 0
+
+
+class NoDataError(LookupError):
+    pass
+
 
 class QuandlAsset(object):
     def __init__(self, quandl_name, authtoken=None, **kwargs):
@@ -41,11 +50,22 @@ class QuandlAsset(object):
             cache_path = os.path.join("quandl_cache", self.quandl_name + ".csv")
             if os.path.exists(cache_path):
                 self._value = DataFrame.from_csv(cache_path)
+            elif os.path.exists(cache_path+'.fail'):
+                raise NoDataError
+            elif isinstance(self._value, Exception):
+                raise self._value
             else:
-                request_count+=1
-                print "Making quandl request %d"%request_count
-                self._value = Quandl.get(self.quandl_name, authtoken=self._authtoken, **self.kwargs)
-                self._value.to_csv(cache_path)
+                try:
+                    request_count+=1
+                    print "Making quandl request %d %s"%(request_count, self.quandl_name)
+                    self._value = Quandl.get(self.quandl_name, authtoken=self._authtoken, **self.kwargs)
+                    self._value.to_csv(cache_path)
+
+                except (DatasetNotFound, CallLimitExceeded) as e:
+                    log.exception("Failed Quandl call")
+                    self._value = NoDataError()
+                    open(cache_path+'.fail','wt').close()
+                    raise self._value
         return self._value
 
 
