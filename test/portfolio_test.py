@@ -1,3 +1,7 @@
+import logging
+log = logging.getLogger(__name__)
+logging.basicConfig()
+
 from data_access import get_file
 from fund import FundsHolder
 from portfolio import PortfoliosHolder

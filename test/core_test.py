@@ -1,3 +1,7 @@
+import logging
+log = logging.getLogger(__name__)
+logging.basicConfig()
+
 from data_access import get_dummy
 
 __author__ = 'andriod'

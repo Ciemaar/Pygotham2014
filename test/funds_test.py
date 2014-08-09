@@ -1,3 +1,7 @@
+import logging
+log = logging.getLogger(__name__)
+logging.basicConfig()
+
 from pandas import date_range
 
 from data_access import get_file
@@ -42,7 +46,7 @@ class FundsTestCase(unittest.TestCase):
                 price_curve.append(
                     (sample_date, self.funds.retirement.price(self.market, self.model, sample_date.date())))
             except KeyError:
-                print "unable to price for %s" % sample_date
+                print "unable to price for %s" % sample_date.date()
         self.assertEquals(len(price_curve), 1321)
 
 
