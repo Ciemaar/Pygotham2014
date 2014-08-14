@@ -1,7 +1,9 @@
 import logging
+
 log = logging.getLogger(__name__)
 logging.basicConfig()
 
+from pricing import price_holding
 from data_access import get_file
 from fund import FundsHolder
 from quandl_streams import get_live
@@ -16,6 +18,10 @@ class PricingCase(unittest.TestCase):
         self.funds = FundsHolder('funds')
         self.model = FileHolder('model')
         self.market = get_live(get_file("sys"), self.model)
+
+    def test_price(self):
+        position_info = self.funds.rip.T[1]
+        self.assertAlmostEqual(price_holding(position_info,self.market,self.model,'2014-03-03'),447.2384)
 
     def test_price_all(self):
         all_prices = sorted(fund.price(self.market, self.model, '2014-05-14') for fund in self.funds)
