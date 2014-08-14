@@ -23,6 +23,11 @@ class PricingCase(unittest.TestCase):
         position_info = self.funds.rip.T[1]
         self.assertAlmostEqual(price_holding(position_info,self.market,self.model,'2014-03-03'),447.2384)
 
+    def test_price2(self):
+        position_info = {'instrument_type': 'stock', 'end_date': None, 'instrument': 'SCI', 'cost': None,
+                         'start_date': '2013-03-08', 'quantity': 23.84}
+        self.assertAlmostEqual(price_holding(position_info, self.market, self.model, '2014-03-03'), 447.2384)
+
     def test_price_all(self):
         all_prices = sorted(fund.price(self.market, self.model, '2014-05-14') for fund in self.funds)
         self.assertEqual(len(all_prices), 6)
