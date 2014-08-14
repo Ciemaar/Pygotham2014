@@ -22,7 +22,11 @@ class Fund(object):
         """Redirect any unknown attribute access to the components panda, this constitutes a proxy
         :type item: str
         """
-        return getattr(self.components, item)
+        if item[0] != '_':
+            return getattr(self.components, item)
+        else:
+            # Default behaviour
+            raise AttributeError
 
     def __getitem__(self, key):
         """Redirect any unknown index to the components panda
