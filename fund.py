@@ -53,12 +53,7 @@ class Fund(object):
         :type cob_date: str or date
         :return:
         """
-        ret = 0
-        for name, row in self.components.iterrows():
-            ret += price_holding(row, market, model, cob_date)
-
-        return ret
-
+        return self.components.apply(price_holding,1,args=(market, model, cob_date)).sum()
 
 class FundsHolder(ObjectHolder):
     "A holder that constructs fund objects out of the data stored in this collection"
