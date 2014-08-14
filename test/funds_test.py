@@ -45,7 +45,11 @@ class FundsTestCase(unittest.TestCase):
                     (sample_date, self.funds.retirement.price(self.market, self.model, sample_date.date())))
             except KeyError:
                 print "unable to price for %s" % sample_date.date()
-        self.assertEquals(len(price_curve), 1321)
+        self.assertEquals(sum(1 for date, price in price_curve if price is not None), 1321)
+
+    def test_hVar(self):
+        self.assertAlmostEqual(self.funds.retirement.hVar(self.market, self.model, '2010-5-14'), 25702.4509)
+        self.assertAlmostEqual(self.funds.retirement.hVar(self.market, self.model, '2014-08-01'), 60368.283014999994)
 
 
 if __name__ == '__main__':
