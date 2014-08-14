@@ -1,7 +1,7 @@
 import logging
 log = logging.getLogger(__name__)
 
-from pandas.tseries.index import date_range, bdate_range
+from pandas.tseries.index import bdate_range
 from pricing import price_holding
 from simple_files import ObjectHolder
 
@@ -67,7 +67,7 @@ class Fund(object):
         dates = bdate_range(end=cob_date, periods=periods)
         log.info("Calculating hVar using date range [%s:%s]",dates[0].date(),dates[-1].date())
         prices = dates.to_series().apply(lambda dt: self.price(market, model, dt.date()))
-        return prices.dropna().quantile(.95)
+        return self.price(market, model, cob_date) - prices.dropna().quantile(.05)
 
 class FundsHolder(ObjectHolder):
     "A holder that constructs fund objects out of the data stored in this collection"

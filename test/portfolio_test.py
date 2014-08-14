@@ -25,6 +25,12 @@ class PortfolioTestCase(unittest.TestCase):
         assert len(all_prices) == 1
         self.assertListEqual(all_prices, [6189685.6500000013])
 
+    def test_hVar(self):
+        portfolio = self.portfolios.scenario_1
+        self.assertAlmostEqual(portfolio.hVar(self.funds, self.market, self.model, '2013-5-14'), 56500.3975)
+        self.assertAlmostEqual(portfolio.hVar(self.funds, self.market, self.model, '2014-08-01'), 1369173.1125)
+
+
 
 if __name__ == '__main__':
     unittest.main()
