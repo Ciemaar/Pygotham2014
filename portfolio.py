@@ -27,10 +27,7 @@ class Portfolio(object):
         return self.components['start_date'].min()
 
     def price(self, funds, market, model, cob_date):
-        price = 0
-        for _, component in self.components.iterrows():
-            price += component['quantity']*funds[component['fund_name']].price(market, model, cob_date)
-        return price
+        return self.components.apply(lambda component:component['quantity']*funds[component['fund_name']].price(market, model, cob_date), axis=1).sum()
 
 
 class PortfoliosHolder(ObjectHolder):
