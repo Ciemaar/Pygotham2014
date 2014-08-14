@@ -1,8 +1,5 @@
-import os
-from functools import partial
-
 from pricing import price_holding
-from simple_files import FileHolder
+from simple_files import ObjectHolder
 
 
 __author__ = 'andriod'
@@ -63,20 +60,9 @@ class Fund(object):
         return ret
 
 
-class FundsHolder(FileHolder):
+class FundsHolder(ObjectHolder):
     "A holder that constructs fund objects out of the data stored in this collection"
-    def create_sub_obj(self, item):
-        ret = super(FundsHolder, self).create_sub_obj(item)
-        # ret = ret.T.append(pd.Series(ret.index.astype(str),ret.index, name='new_id')).T
-
-        return Fund(ret)
-
-    def __iter__(self):
-        """Fund Holders can be iterated to work on the funds in sequence
+    klass = Fund
 
 
-        """
-        for key in os.listdir(self.file_path):
-            key, _ = os.path.splitext(key)
-            yield self[key]
 

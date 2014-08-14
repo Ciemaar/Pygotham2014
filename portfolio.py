@@ -1,6 +1,6 @@
 import os
 
-from simple_files import FileHolder
+from simple_files import ObjectHolder
 
 
 __author__ = 'andriod'
@@ -33,14 +33,5 @@ class Portfolio(object):
         return price
 
 
-class PortfoliosHolder(FileHolder):
-    def create_sub_obj(self, item):
-        ret = super(PortfoliosHolder, self).create_sub_obj(item)
-        # ret = ret.T.append(pd.Series(ret.index.astype(str),ret.index, name='new_id')).T
-
-        return Portfolio(ret)
-
-    def __iter__(self):
-        for key in os.listdir(self.file_path):
-            key, _ = os.path.splitext(key)
-            yield self[key]
+class PortfoliosHolder(ObjectHolder):
+    klass=Portfolio

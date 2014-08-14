@@ -66,24 +66,19 @@ class FileHolder(AbstractBaseHolder):
         return str(os.path.join(*[x.name for x in self.path]))
 
 
+class ObjectHolder(FileHolder):
+    "A file holder that wraps the stored object in class, also iterable"
+    def create_sub_obj(self, item):
+        ret = super(ObjectHolder, self).create_sub_obj(item)
+        # ret = ret.T.append(pd.Series(ret.index.astype(str),ret.index, name='new_id')).T
+
+        return self.klass(ret)
+
+    def __iter__(self):
+        """Object Holders can be iterated to work on the funds in sequence
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        """
+        for key in os.listdir(self.file_path):
+            key, _ = os.path.splitext(key)
+            yield self[key]
