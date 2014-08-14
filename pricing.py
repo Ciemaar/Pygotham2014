@@ -32,8 +32,14 @@ def price_stock(holding, market, model, cob_date):
 
 
 def price_holding(holding_info, market, model, cob_date):
-    # if row['position_id'][0] == '#':
-    # continue
+    """General function to take a position and price it
+
+    :type holding_info: pandas.core.series.Series
+    :type market: holders.BaseHolder
+    :type model: simple_files.FileHolder
+    :type cob_date: str or date
+    :return:
+    """
     try:
         return pricers[holding_info['instrument_type']](holding_info, market, model, cob_date)
     except NoDataError:
