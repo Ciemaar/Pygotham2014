@@ -1,6 +1,6 @@
 import os
-
 import pandas
+
 import yaml
 
 from holders import AbstractBaseHolder
@@ -67,7 +67,7 @@ class FileHolder(AbstractBaseHolder):
 
 
 class ObjectHolder(FileHolder):
-    "A file holder that wraps the stored object in class, also iterable"
+    """A file holder that wraps the stored object in class, also iterable"""
     def create_sub_obj(self, item):
         ret = super(ObjectHolder, self).create_sub_obj(item)
         # ret = ret.T.append(pd.Series(ret.index.astype(str),ret.index, name='new_id')).T
@@ -82,3 +82,7 @@ class ObjectHolder(FileHolder):
         for key in os.listdir(self.file_path):
             key, _ = os.path.splitext(key)
             yield self[key]
+
+    def __setitem__(self, key, value):
+        super(ObjectHolder, self).__setitem__(key, value)
+        value.to_csv(os.path.join(self.file_path, key) + ".csv")
