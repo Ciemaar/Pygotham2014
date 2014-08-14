@@ -1,7 +1,7 @@
 import logging
 
 log = logging.getLogger(__name__)
-logging.basicConfig()
+logging.basicConfig(level=logging.DEBUG)
 
 from pandas import date_range
 
@@ -48,8 +48,8 @@ class FundsTestCase(unittest.TestCase):
         self.assertEquals(sum(1 for date, price in price_curve if price is not None), 1321)
 
     def test_hVar(self):
-        self.assertAlmostEqual(self.funds.retirement.hVar(self.market, self.model, '2010-5-14'), 25702.4509)
-        self.assertAlmostEqual(self.funds.retirement.hVar(self.market, self.model, '2014-08-01'), 60368.283014999994)
+        self.assertAlmostEqual(self.funds.retirement.hVar(self.market, self.model, '2010-5-14'), 25696.9825)
+        self.assertAlmostEqual(self.funds.retirement.hVar(self.market, self.model, '2014-08-01'), 60331.898285)
 
 
 if __name__ == '__main__':

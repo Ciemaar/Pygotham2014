@@ -63,10 +63,10 @@ class Fund(object):
             log.warning("Unable to price on %s",cob_date)
             return None
 
-    def hVar(self, market, model, cob_date, periods=260):
+    def hVar(self, market, model, cob_date, periods=262):
         dates = bdate_range(end=cob_date, periods=periods)
+        log.info("Calculating hVar using date range [%s:%s]",dates[0].date(),dates[-1].date())
         prices = dates.to_series().apply(lambda dt: self.price(market, model, dt.date()))
-
         return prices.dropna().quantile(.95)
 
 class FundsHolder(ObjectHolder):
