@@ -1,4 +1,5 @@
 import logging
+
 log = logging.getLogger(__name__)
 logging.basicConfig()
 
@@ -6,7 +7,6 @@ from pandas import date_range
 
 from data_access import get_file
 from fund import FundsHolder
-from pricing import price_fund
 from quandl_streams import get_live
 from simple_files import FileHolder
 
@@ -29,8 +29,6 @@ class FundsTestCase(unittest.TestCase):
         assert self.funds.retirement.cost.sum() == 200
 
     def test_price(self):
-        value = price_fund(self.funds.retirement, self.market, self.model, '2010-5-14')
-        self.assertAlmostEqual(value, 25461.2615)
         self.assertAlmostEqual(self.funds.retirement.price(self.market, self.model, '2010-5-14'), 25461.2615)
 
     def test_start_date(self):

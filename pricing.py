@@ -31,18 +31,17 @@ def price_stock(holding, market, model, cob_date):
     return (market.stock[holding['instrument']]).Close[cob_date] * holding['quantity']
 
 
-def price_fund(fund, market, model, cob_date):
-    ret = 0
-    for name, row in fund.iterrows():
-        # if row['position_id'][0] == '#':
-        # continue
-        try:
-            ret += pricers[row['instrument_type']](row, market, model, cob_date)
-        except NoDataError:
-            log.exception("Skipping position %s %s:%s", name, row['instrument_type'], row['instrument'])
-        except DatasetNotFound:
-            log.exception("Skipping position %s %s:%s", name, row['instrument_type'], row['instrument'])
-        except CallLimitExceeded:
-            log.exception("Skipping position %s %s:%s", name, row['instrument_type'], row['instrument'])
+def price_holding(name, holding_info, market, model, cob_date):
+    # if row['position_id'][0] == '#':
+    # continue
+    try:
+        return pricers[holding_info['instrument_type']](holding_info, market, model, cob_date)
+    except NoDataError:
+        log.exception("Skipping position %s %s:%s", name, holding_info['instrument_type'], holding_info['instrument'])
+    except DatasetNotFound:
+        log.exception("Skipping position %s %s:%s", name, holding_info['instrument_type'], holding_info['instrument'])
+    except CallLimitExceeded:
+        log.exception("Skipping position %s %s:%s", name, holding_info['instrument_type'], holding_info['instrument'])
+    return 0
 
-    return ret
+

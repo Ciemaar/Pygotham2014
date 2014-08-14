@@ -1,6 +1,6 @@
 import os
+from pricing import price_holding
 
-from pricing import price_fund
 from simple_files import FileHolder
 
 
@@ -28,7 +28,11 @@ class Fund(object):
         return self.components['start_date'].min()
 
     def price(self, market, model, cob_date):
-        return price_fund(self.components, market, model, cob_date)
+        ret = 0
+        for name, row in self.components.iterrows():
+            ret += price_holding(name, row, market, model, cob_date)
+
+        return ret
 
 
 class FundsHolder(FileHolder):
@@ -42,3 +46,4 @@ class FundsHolder(FileHolder):
         for key in os.listdir(self.file_path):
             key, _ = os.path.splitext(key)
             yield self[key]
+
