@@ -1,6 +1,7 @@
 import os
-from pricing import price_holding
+from functools import partial
 
+from pricing import price_holding
 from simple_files import FileHolder
 
 
@@ -30,7 +31,7 @@ class Fund(object):
     def price(self, market, model, cob_date):
         ret = 0
         for name, row in self.components.iterrows():
-            ret += price_holding(name, row, market, model, cob_date)
+            ret += price_holding(row, market, model, cob_date)
 
         return ret
 
