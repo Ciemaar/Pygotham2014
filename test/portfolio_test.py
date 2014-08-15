@@ -22,8 +22,8 @@ class PortfolioTestCase(unittest.TestCase):
         
     def test_price_all(self):
         all_prices = [portfolio.price(self.funds, self.market, self.model, '2014-05-14') for portfolio in self.portfolios]
-        assert len(all_prices) == 1
-        self.assertListEqual(all_prices, [6189685.6500000013])
+        assert len(all_prices) == 2
+        self.assertListEqual(all_prices, [6189685.6500000013, 6353963.3715000013])
 
     def test_hVar(self):
         portfolio = self.portfolios.scenario_1
