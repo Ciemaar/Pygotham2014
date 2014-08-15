@@ -22,7 +22,6 @@ class NoDataError(LookupError):
 
 class QuandlAsset(object):
     quandl_disable = False
-
     def __init__(self, quandl_name, authtoken=None, **kwargs):
         """Uses the Quandl service to get live data
 
@@ -34,23 +33,23 @@ class QuandlAsset(object):
         self.quandl_name = quandl_name
         self._value = None
         self.kwargs = kwargs
-
     def __getattr__(self, item):
         """Redirect any unknown attribute access to the data retrieved from Quandl, this constitutes a proxy
         """
         return getattr(self.value, item)
-
     def __getitem__(self, key):
         return self.value[key]
-
     def __len__(self):
         return len(self.value)
-
     def _fix_missing(self, raw_dataframe):
         new_index = bdate_range(raw_dataframe.index.min(), raw_dataframe.index.max())
         return raw_dataframe.reindex(new_index, method='ffill')
-
     def _retrieve_from_quandl(self, cache_path):
+        """Retriev data from Quandl, caching if needed
+
+        :param cache_path:
+        :raise NoDataError:
+        """
         global request_count
         try:
             request_count += 1
@@ -82,7 +81,6 @@ class QuandlAsset(object):
                 raise NoDataError('Quandl Disabled due to rate limit')
             else:
                 self._retrieve_from_quandl(cache_path)
-
         return self._value
 
 
@@ -90,6 +88,15 @@ class QuandlHolder(AbstractBaseHolder):
     _instance_vars = AbstractBaseHolder._instance_vars + ['prefix', 'authtoken']
 
     def __init__(self, name_map_or_prefix, name, *prev_path, **kwargs):
+        """To initialize a market data collection based on Quandl you need either to provide a map or prefix
+
+        The map will convert your of names to Qundle names or the prefix will be added to all requested names
+
+        :type name_map_or_prefix: FileHolder or str
+        :type name: str
+        :param prev_path:
+        :param kwargs:
+        """
         super(QuandlHolder, self).__init__(name, *prev_path)
         if isinstance(name_map_or_prefix, basestring):
             self.prefix = name_map_or_prefix
