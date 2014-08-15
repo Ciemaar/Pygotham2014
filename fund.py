@@ -54,7 +54,7 @@ class Fund(object):
 
         :return:
         """
-        return self.components['start_date'].min()
+        return self['start_date'].min()
 
     def price(self, market, model, cob_date):
         """Price the fund by pricing all of its positions
@@ -70,8 +70,17 @@ class Fund(object):
             log.warning("Fund %s unable to price on %s", self.name, cob_date)
             return None
 
-    def hVar(self, market, model, cob_date, periods=262):
-        dates = bdate_range(end=cob_date, periods=periods)
+    def hVar(self, market, model, cob_date, days=262):
+        """Calculate the historical var for this fund on the given date.
+
+        :type market: holders.BaseHolder market data
+        :type model: simple_files.FileHolder model data for use by pricers
+        :type cob_date: str cob date to calculate var for
+        :type days: int number of business days to look back for the historical market data, defaults to 262 which works
+                    by pandas logic
+        :return:
+        """
+        dates = bdate_range(end=cob_date, periods=days)
         log.info("Calculating hVar using date range [%s:%s]", dates[0].date(), dates[-1].date())
         prices = dates.to_series().apply(lambda dt: self.price(market, model, dt.date()))
         return self.price(market, model, cob_date) - prices.dropna().quantile(.05)

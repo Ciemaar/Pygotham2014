@@ -22,8 +22,8 @@ class Portfolio(Fund):
             return None
 
 
-    def hVar(self, funds, market, model, cob_date, periods=262):
-        dates = bdate_range(end=cob_date, periods=periods)
+    def hVar(self, funds, market, model, cob_date, days=262):
+        dates = bdate_range(end=cob_date, periods=days)
         log.info("Calculating hVar using date range [%s:%s]", dates[0].date(), dates[-1].date())
         prices = dates.to_series().apply(lambda dt: self.price(funds, market, model, dt.date()))
         return self.price(funds, market, model, cob_date) - prices.dropna().quantile(.05)
