@@ -27,7 +27,7 @@ class PortfolioTestCase(unittest.TestCase):
 
     def test_hVar(self):
         portfolio = self.portfolios.scenario_1
-        self.assertAlmostEqual(portfolio.hVar(self.funds, self.market, self.model, '2013-5-14'), 56464.615)
+        self.assertAlmostEqual(portfolio.hVar(self.funds, self.market, self.model, '2014-5-14'), 775685.64)
         self.assertAlmostEqual(portfolio.hVar(self.funds, self.market, self.model, '2014-08-01'), 1366621.44)
 
 

@@ -32,9 +32,10 @@ class PricingCase(unittest.TestCase):
     def test_price_all(self):
         all_prices = sorted(fund.price(self.market, self.model, '2014-05-14') for fund in self.funds)
         self.assertEqual(len(all_prices), 10)
-        self.assertListEqual(all_prices, sorted(
-            [4139.9243000000006, 85.053227000000007, 4099.5227000000004, 122.020098, 96.709960000000024,
-             59459.754800000002]))
+        print all_prices
+        self.assertListEqual(all_prices, [20.224229000000001, 52.77375399999999, 54.362542000000019, 74.230075999999997,
+                                          85.053227000000007, 96.373496000000017, 122.020098, 4099.5227000000004,
+                                          4139.9243000000006, 59459.754800000002])
 
 
 if __name__ == '__main__':
