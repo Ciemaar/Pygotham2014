@@ -61,6 +61,17 @@ class FileHolder(AbstractBaseHolder):
     def file_path(self):
         return str(os.path.join(*[x.name for x in self.path]))
 
+    def __setitem__(self, key, value):
+        """We allow the saving back of any object that implents to_csv, saving yamls is not currently supported
+
+        :param key:
+        :param value:
+        """
+        super(FileHolder, self).__setitem__(key, value)
+        if not os.path.exists(self.file_path):
+            os.makedirs(self.file_path)
+        value.to_csv(os.path.join(self.file_path, key) + ".csv")
+
 
 class ObjectHolder(FileHolder):
     """A file holder that wraps the stored object in class, also iterable"""
@@ -69,14 +80,6 @@ class ObjectHolder(FileHolder):
         for key in os.listdir(self.file_path):
             key, _ = os.path.splitext(key)
             yield self[key]
-    def __setitem__(self, key, value):
-        """We allow the saving back of any object that implents to_csv, saving yamls is not currently supported
-
-        :param key:
-        :param value:
-        """
-        super(ObjectHolder, self).__setitem__(key, value)
-        value.to_csv(os.path.join(self.file_path, key) + ".csv")
 
     def create_sub_obj(self, item):
         """Extends the base class to wrap the retrieved data in a class
