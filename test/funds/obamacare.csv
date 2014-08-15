@@ -5,7 +5,6 @@ position_id,instrument_type,instrument,quantity,cost,start_date,end_date
 4,stock,SEM,0.0316,,12/21/2012,
 5,stock,CYH,0.0289,,12/21/2012,
 6,stock,HLS,0.0164,,12/21/2012,
-7,stock,SCAI,0.0133,,12/21/2012,
 8,stock,THC,0.0117,,12/21/2012,
 9,stock,KND,0.011,,12/21/2012,
 10,stock,ACT,0.1624,,12/21/2012,
