@@ -65,7 +65,7 @@ class Fund(object):
         try:
             return self.components.apply(price_holding,1,args=(market, model, cob_date)).sum()
         except KeyError:
-            log.warning("Unable to price on %s",cob_date)
+            log.warning("Fund %s unable to price on %s", self.name, cob_date)
             return None
 
     def hVar(self, market, model, cob_date, periods=262):
