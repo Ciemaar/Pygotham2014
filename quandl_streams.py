@@ -1,19 +1,17 @@
 import logging
-from pandas import bdate_range
 from time import sleep
-
-log = logging.getLogger(__name__)
-
 import os.path
 from itertools import chain
+from pandas.core.frame import DataFrame
+from pandas import bdate_range
 
 import Quandl
 from Quandl.Quandl import DatasetNotFound, CallLimitExceeded, ErrorDownloading
-from pandas.core.frame import DataFrame
 
 from holders import AbstractBaseHolder, BaseHolder
 
 
+log = logging.getLogger(__name__)
 __author__ = 'andriod'
 request_count = 0
 
@@ -24,6 +22,7 @@ class NoDataError(LookupError):
 
 class QuandlAsset(object):
     quandl_disable = False
+
     def __init__(self, quandl_name, authtoken=None, **kwargs):
         """Uses the Quandl service to get live data
 
@@ -51,6 +50,25 @@ class QuandlAsset(object):
         new_index = bdate_range(raw_dataframe.index.min(), raw_dataframe.index.max())
         return raw_dataframe.reindex(new_index, method='ffill')
 
+    def _retrieve_from_quandl(self, cache_path):
+        global request_count
+        try:
+            request_count += 1
+            sleep_time = 2 ** (request_count // 10)
+            print "Making quandl request %d %s (sleep time %f)" % (request_count, self.quandl_name, sleep_time)
+            sleep(sleep_time)
+            df = Quandl.get(self.quandl_name, authtoken=self._authtoken, **self.kwargs)
+            df.to_csv(cache_path)
+            self._value = self._fix_missing(df)
+        except DatasetNotFound as e:
+            log.exception("Failed Quandl call")
+            self.quandl_disable = True
+            open(cache_path + '.fail', 'wt').close()
+            raise NoDataError('Failed Quandl call -- absent data')
+        except (ErrorDownloading, CallLimitExceeded):
+            QuandlAsset.quandl_disable = True
+            raise NoDataError('Quandl Disabled due to rate limit')
+
     @property
     def value(self):
         global request_count
@@ -58,29 +76,12 @@ class QuandlAsset(object):
             cache_path = os.path.join("quandl_cache", self.quandl_name + ".csv")
             if os.path.exists(cache_path):
                 self._value = self._fix_missing(DataFrame.from_csv(cache_path))
-            elif os.path.exists(cache_path+'.fail'):
-                raise NoDataError
-            elif isinstance(self._value, Exception):
-                raise self._value
+            elif os.path.exists(cache_path + '.fail'):
+                raise NoDataError('Previously failed')
             elif self.quandl_disable:
                 raise NoDataError('Quandl Disabled due to rate limit')
             else:
-                try:
-                    request_count+=1
-                    sleep_time = 2 ** (request_count // 10)
-                    print "Making quandl request %d %s (sleep time %f)" % (request_count, self.quandl_name, sleep_time)
-                    sleep(sleep_time)
-                    df = Quandl.get(self.quandl_name, authtoken=self._authtoken, **self.kwargs)
-                    df.to_csv(cache_path)
-                    self._value = self._fix_missing(df)
-                except DatasetNotFound as e:
-                    log.exception("Failed Quandl call")
-                    self._value = NoDataError()
-                    open(cache_path+'.fail','wt').close()
-                    raise self._value
-                except (ErrorDownloading, CallLimitExceeded):
-                    QuandlAsset.quandl_disable = True
-                    raise NoDataError('Quandl Disabled due to rate limit')
+                self._retrieve_from_quandl(cache_path)
 
         return self._value
 
