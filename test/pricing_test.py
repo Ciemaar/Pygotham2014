@@ -19,17 +19,21 @@ class PricingTestCase(unittest.TestCase):
         self.funds = FundsHolder('funds')
         self.model = FileHolder('model')
         self.market = get_live(get_file("sys"), self.model)
-
     def test_price(self):
-        position_info = self.funds.rip.T[1]
-        self.assertAlmostEqual(price_holding(position_info, self.market, self.model, '2014-03-03'), 447.2384)
-
-    def test_price2(self):
+        """Test pricing by submitting a constructed dictionary for pricing"""
         position_info = {'instrument_type': 'stock', 'end_date': None, 'instrument': 'SCI', 'cost': None,
                          'start_date': '2013-03-08', 'quantity': 23.84}
         self.assertAlmostEqual(price_holding(position_info, self.market, self.model, '2014-03-03'), 447.2384)
 
+    def test_price2(self):
+        """Same asset, but getting it from a fund instead"""
+        position_info = self.funds.rip.T[1]
+        self.assertAlmostEqual(price_holding(position_info, self.market, self.model, '2014-03-03'), 447.2384)
+
     def test_price_all(self):
+        """Test pricing of all funds
+
+        Note:  This test is likely to hit rate limits in Quandl if run with a fully empty cache"""
         all_prices = sorted(fund.price(self.market, self.model, '2014-05-14') for fund in self.funds)
         self.assertEqual(len(all_prices), 10)
         print all_prices
