@@ -68,6 +68,7 @@ class FileHolder(AbstractBaseHolder):
 
 class ObjectHolder(FileHolder):
     """A file holder that wraps the stored object in class, also iterable"""
+
     def create_sub_obj(self, item):
         ret = super(ObjectHolder, self).create_sub_obj(item)
         # ret = ret.T.append(pd.Series(ret.index.astype(str),ret.index, name='new_id')).T
