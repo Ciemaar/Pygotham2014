@@ -29,7 +29,7 @@ class FundsTestCase(unittest.TestCase):
         assert self.funds.retirement.cost.sum() == 200
 
     def test_price(self):
-        self.assertAlmostEqual(self.funds.retirement.price(self.market, self.model, '2010-5-14'), 3527.7145087294998)
+        self.assertAlmostEqual(self.funds.retirement.price(self.market, self.model, '2010-5-14'), 3574.6176662239959)
 
     def test_start_date(self):
         min_date = self.funds.retirement.start_date
@@ -48,8 +48,8 @@ class FundsTestCase(unittest.TestCase):
         self.assertEquals(sum(1 for date, price in price_curve if price is not None), 1370)
 
     def test_hVar(self):
-        self.assertAlmostEqual(self.funds.retirement.hVar(self.market, self.model, '2010-5-14'), 1613.3830616664395)
-        self.assertAlmostEqual(self.funds.retirement.hVar(self.market, self.model, '2014-08-01'), 3027.2246226186362)
+        self.assertAlmostEqual(self.funds.retirement.hVar(self.market, self.model, '2010-5-14'), 1593.8541765594923)
+        self.assertAlmostEqual(self.funds.retirement.hVar(self.market, self.model, '2014-08-01'), 3029.5852241267439)
 
 
 if __name__ == '__main__':

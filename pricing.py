@@ -30,7 +30,7 @@ def price_fx(holding, market, model, cob_date):
     :type cob_date: str or date
     :return:
     """
-    return market.fx['_'.join((model.config['base_ccy'], holding['instrument']))].Rate[cob_date] * holding['quantity']
+    return holding['quantity'] / market.fx['_'.join((model.config['base_ccy'], holding['instrument']))].Rate[cob_date]
 
 @pricer
 def price_stock(holding, market, model, cob_date):
