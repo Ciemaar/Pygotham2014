@@ -42,6 +42,10 @@ def price_holding(holding_info, market, model, cob_date):
     """
     try:
         return pricers[holding_info['instrument_type']](holding_info, market, model, cob_date)
+    except KeyError:
+        log.warning("%s holding %s has no data for %s", holding_info['instrument_type'], holding_info['instrument'],
+                    cob_date)
+        raise
     except NoDataError:
         log.exception("Skipping position %s %s:%s", holding_info.name, holding_info['instrument_type'], holding_info['instrument'])
     except DatasetNotFound:
