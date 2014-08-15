@@ -25,12 +25,12 @@ class PortfolioTestCase(unittest.TestCase):
         all_prices = [portfolio.price(self.funds, self.market, self.model, '2014-05-14') for portfolio in
                       self.portfolios]
         assert len(all_prices) == 2
-        self.assertListEqual(all_prices, [6189685.6500000013, 6353963.3715000013])
+        self.assertListEqual(all_prices, [6170175.198071707, 6330563.9628051836])
 
     def test_hVar(self):
         portfolio = self.portfolios.scenario_1
-        self.assertAlmostEqual(portfolio.hVar(self.funds, self.market, self.model, '2014-5-14'), 775685.64)
-        self.assertAlmostEqual(portfolio.hVar(self.funds, self.market, self.model, '2014-08-01'), 1366621.44)
+        self.assertAlmostEqual(portfolio.hVar(self.funds, self.market, self.model, '2014-5-14'), 814564.40240158793)
+        self.assertAlmostEqual(portfolio.hVar(self.funds, self.market, self.model, '2014-08-01'), 1418300.1873188419)
 
 
 if __name__ == '__main__':

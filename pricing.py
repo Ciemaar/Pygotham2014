@@ -42,7 +42,7 @@ def price_stock(holding, market, model, cob_date):
     :type cob_date: str or date
     :return:
     """
-    return (market.stock[holding['instrument']]).Close[cob_date] * holding['quantity']
+    return (market.stock[holding['instrument']])['Adj. Close'][cob_date] * holding['quantity']
 
 def price_holding(holding_info, market, model, cob_date):
     """General function to take a position and price it
