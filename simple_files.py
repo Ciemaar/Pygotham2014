@@ -6,7 +6,7 @@ import yaml
 from holders import AbstractBaseHolder
 
 
-__author__ = 'andriod'
+__author__ = 'Andy Fundinger - Andy.Fundinger@riskfocus.com'
 
 
 class FileHolder(AbstractBaseHolder):

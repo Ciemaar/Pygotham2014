@@ -1,4 +1,5 @@
 import logging
+
 log = logging.getLogger(__name__)
 
 from pandas.tseries.index import bdate_range
@@ -6,7 +7,7 @@ from pricing import price_holding
 from simple_files import ObjectHolder
 
 
-__author__ = 'andriod'
+__author__ = 'Andy Fundinger - Andy.Fundinger@riskfocus.com'
 
 
 class Fund(object):
@@ -63,16 +64,17 @@ class Fund(object):
         :return:
         """
         try:
-            return self.components.apply(price_holding,1,args=(market, model, cob_date)).sum()
+            return self.components.apply(price_holding, 1, args=(market, model, cob_date)).sum()
         except KeyError:
             log.warning("Fund %s unable to price on %s", self.name, cob_date)
             return None
 
     def hVar(self, market, model, cob_date, periods=262):
         dates = bdate_range(end=cob_date, periods=periods)
-        log.info("Calculating hVar using date range [%s:%s]",dates[0].date(),dates[-1].date())
+        log.info("Calculating hVar using date range [%s:%s]", dates[0].date(), dates[-1].date())
         prices = dates.to_series().apply(lambda dt: self.price(market, model, dt.date()))
         return self.price(market, model, cob_date) - prices.dropna().quantile(.05)
+
 
 class FundsHolder(ObjectHolder):
     "A holder that constructs fund objects out of the data stored in this collection"

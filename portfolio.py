@@ -8,7 +8,7 @@ from fund import Fund
 from simple_files import ObjectHolder
 
 
-__author__ = 'andriod'
+__author__ = 'Andy Fundinger - Andy.Fundinger@riskfocus.com'
 
 
 class Portfolio(Fund):

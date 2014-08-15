@@ -4,7 +4,7 @@ logging.basicConfig()
 
 from data_access import get_dummy
 
-__author__ = 'andriod'
+__author__ = 'Andy Fundinger - Andy.Fundinger@riskfocus.com'
 
 import unittest
 

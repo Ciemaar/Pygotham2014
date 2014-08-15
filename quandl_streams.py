@@ -12,7 +12,7 @@ from holders import AbstractBaseHolder, BaseHolder
 
 
 log = logging.getLogger(__name__)
-__author__ = 'andriod'
+__author__ = 'Andy Fundinger - Andy.Fundinger@riskfocus.com'
 request_count = 0
 
 

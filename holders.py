@@ -2,7 +2,7 @@ from abc import abstractmethod
 from collections import MutableMapping
 from warnings import warn
 
-__author__ = 'andriod'
+__author__ = 'Andy Fundinger - Andy.Fundinger@riskfocus.com'
 
 
 class AbstractBaseHolder(MutableMapping, object):

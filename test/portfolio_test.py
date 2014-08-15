@@ -8,7 +8,7 @@ from portfolio import PortfoliosHolder
 from quandl_streams import get_live
 from simple_files import FileHolder
 
-__author__ = 'andriod'
+__author__ = 'Andy Fundinger - Andy.Fundinger@riskfocus.com'
 
 import unittest
 

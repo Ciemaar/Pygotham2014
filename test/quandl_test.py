@@ -9,7 +9,7 @@ from quandl_streams import get_live, QuandlAsset
 from simple_files import FileHolder
 
 
-__author__ = 'andriod'
+__author__ = 'Andy Fundinger - Andy.Fundinger@riskfocus.com'
 
 
 class QuandlTestCase(unittest.TestCase):

@@ -4,7 +4,7 @@ log = logging.getLogger(__name__)
 from quandl_streams import NoDataError
 from Quandl.Quandl import DatasetNotFound, CallLimitExceeded
 
-__author__ = 'andriod'
+__author__ = 'Andy Fundinger - Andy.Fundinger@riskfocus.com'
 
 pricers = {}
 
