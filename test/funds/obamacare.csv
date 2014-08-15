@@ -9,7 +9,6 @@ position_id,instrument_type,instrument,quantity,cost,start_date,end_date
 8,stock,THC,0.0117,,12/21/2012,
 9,stock,KND,0.011,,12/21/2012,
 10,stock,ACT,0.1624,,12/21/2012,
-11,stock,TARO,0.0466,,12/21/2012,
 12,stock,IPXL,0.0179,,12/21/2012,
 13,stock,LCI,0.0164,,12/21/2012,
 14,stock,SGNT,0.016,,12/21/2012,

@@ -1,6 +1,4 @@
 position_id,instrument_type,instrument,quantity,cost,start_date,end_date
-1,stock,NVO,0.2693,,06/20/2012,
-2,stock,SNY,0.1486,,06/20/2012,
 3,stock,MRK,0.0864,,06/20/2012,
 4,stock,BMY,0.0255,,06/20/2012,
 5,stock,GB,0.0127,,06/20/2012,
