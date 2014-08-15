@@ -72,7 +72,7 @@ class ObjectHolder(FileHolder):
         ret = super(ObjectHolder, self).create_sub_obj(item)
         # ret = ret.T.append(pd.Series(ret.index.astype(str),ret.index, name='new_id')).T
 
-        return self.klass(ret)
+        return self.klass(item, ret)
 
     def __iter__(self):
         """Object Holders can be iterated to work on the funds in sequence

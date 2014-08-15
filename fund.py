@@ -10,12 +10,13 @@ __author__ = 'andriod'
 
 
 class Fund(object):
-    def __init__(self, components):
+    def __init__(self, name, components):
         """Hold information about the composition of a fund.
 
         :type components: pandas.core.frame.DataFrame
         """
         super(Fund, self).__init__()
+        self.name = name
         self.components = components
 
     def __getattr__(self, item):
