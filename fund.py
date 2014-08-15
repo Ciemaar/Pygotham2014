@@ -22,6 +22,7 @@ class Fund(object):
 
     def __getattr__(self, item):
         """Redirect any unknown attribute access to the components panda, this constitutes a proxy
+
         :type item: str
         """
         if item[0] != '_':

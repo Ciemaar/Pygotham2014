@@ -11,7 +11,6 @@ __author__ = 'Andy Fundinger - Andy.Fundinger@riskfocus.com'
 
 class FileHolder(AbstractBaseHolder):
     _instance_vars = ['_instance_vars', 'yaml_dict', 'file_path']
-
     def __init__(self, name, *prev_path):
         """FileHolders hold a section of the data and are matched in the file system with a matching directory or file
 
@@ -21,7 +20,6 @@ class FileHolder(AbstractBaseHolder):
         super(FileHolder, self).__init__(name, *prev_path)
         self.is_dir = os.path.isdir(self.file_path)
         self._yaml_obj = None
-
     def __len__(self):
         if self.is_dir:
             return len(os.listdir(self.file_path))
@@ -29,7 +27,6 @@ class FileHolder(AbstractBaseHolder):
             return len(self.yaml_obj)
         else:
             return 0  # empty iter, we have no case for this now
-
     @property
     def yaml_obj(self):
         if self._yaml_obj is not None:
@@ -39,7 +36,6 @@ class FileHolder(AbstractBaseHolder):
             return self._yaml_obj
         else:
             return None
-
     @property
     def value(self):
         if self.is_dir:
@@ -68,22 +64,28 @@ class FileHolder(AbstractBaseHolder):
 
 class ObjectHolder(FileHolder):
     """A file holder that wraps the stored object in class, also iterable"""
+    def __iter__(self):
+        """Object Holders can be iterated to work on the contained objects in sequence"""
+        for key in os.listdir(self.file_path):
+            key, _ = os.path.splitext(key)
+            yield self[key]
+    def __setitem__(self, key, value):
+        """We allow the saving back of any object that implents to_csv, saving yamls is not currently supported
+
+        :param key:
+        :param value:
+        """
+        super(ObjectHolder, self).__setitem__(key, value)
+        value.to_csv(os.path.join(self.file_path, key) + ".csv")
 
     def create_sub_obj(self, item):
+        """Extends the base class to wrap the retrieved data in a class
+
+        :type item: str
+        :return: wrapped data
+        """
         ret = super(ObjectHolder, self).create_sub_obj(item)
         # ret = ret.T.append(pd.Series(ret.index.astype(str),ret.index, name='new_id')).T
 
         return self.klass(item, ret)
 
-    def __iter__(self):
-        """Object Holders can be iterated to work on the funds in sequence
-
-
-        """
-        for key in os.listdir(self.file_path):
-            key, _ = os.path.splitext(key)
-            yield self[key]
-
-    def __setitem__(self, key, value):
-        super(ObjectHolder, self).__setitem__(key, value)
-        value.to_csv(os.path.join(self.file_path, key) + ".csv")
