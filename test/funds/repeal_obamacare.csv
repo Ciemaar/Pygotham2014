@@ -3,7 +3,6 @@ position_id,instrument_type,instrument,quantity,cost,start_date,end_date
 2,stock,LH,0.1405,,2013-03-01,
 3,stock,DGX,0.0755,,2013-03-01,
 4,stock,CPHD,0.0404,,2013-03-01,
-5,stock,TRIB,0.0369,,2013-03-01,
 6,stock,GNMK,0.0256,,2013-03-01,
 7,stock,RDNT,0.0205,,2013-03-01,
 8,stock,LMNX,0.0195,,2013-03-01,
