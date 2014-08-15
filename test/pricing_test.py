@@ -14,7 +14,7 @@ __author__ = 'Andy Fundinger - Andy.Fundinger@riskfocus.com'
 import unittest
 
 
-class PricingCase(unittest.TestCase):
+class PricingTestCase(unittest.TestCase):
     def setUp(self):
         self.funds = FundsHolder('funds')
         self.model = FileHolder('model')
