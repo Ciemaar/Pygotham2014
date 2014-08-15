@@ -1,4 +1,5 @@
 import logging
+from pandas import bdate_range
 from time import sleep
 
 log = logging.getLogger(__name__)
@@ -46,13 +47,17 @@ class QuandlAsset(object):
     def __len__(self):
         return len(self.value)
 
+    def _fix_missing(self, raw_dataframe):
+        new_index = bdate_range(raw_dataframe.index.min(), raw_dataframe.index.max())
+        return raw_dataframe.reindex(new_index, method='ffill')
+
     @property
     def value(self):
         global request_count
         if self._value is None:
             cache_path = os.path.join("quandl_cache", self.quandl_name + ".csv")
             if os.path.exists(cache_path):
-                self._value = DataFrame.from_csv(cache_path)
+                self._value = self._fix_missing(DataFrame.from_csv(cache_path))
             elif os.path.exists(cache_path+'.fail'):
                 raise NoDataError
             elif isinstance(self._value, Exception):
@@ -65,9 +70,9 @@ class QuandlAsset(object):
                     sleep_time = 2 ** (request_count // 10)
                     print "Making quandl request %d %s (sleep time %f)" % (request_count, self.quandl_name, sleep_time)
                     sleep(sleep_time)
-                    self._value = Quandl.get(self.quandl_name, authtoken=self._authtoken, **self.kwargs)
-                    self._value.to_csv(cache_path)
-
+                    df = Quandl.get(self.quandl_name, authtoken=self._authtoken, **self.kwargs)
+                    df.to_csv(cache_path)
+                    self._value = self._fix_missing(df)
                 except DatasetNotFound as e:
                     log.exception("Failed Quandl call")
                     self._value = NoDataError()
