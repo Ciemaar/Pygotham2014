@@ -13,14 +13,13 @@ __author__ = 'Andy Fundinger - Andy.Fundinger@riskfocus.com'
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
+    cob_date = sys.argv[1]
 
     portfolios = PortfoliosHolder('portfolio')
     funds = FundsHolder('funds')
     model = FileHolder('model')
     results = FileHolder('results')
     market = get_live(get_file("sys"), model)
-
-    cob_date = sys.argv[1]
 
     risk_by_fund = DataFrame(
         ((fund.name, fund.price(market, model, cob_date), fund.hVar(market, model, cob_date)) for fund in funds),
