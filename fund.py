@@ -70,6 +70,9 @@ class Fund(object):
             log.warning("Fund %s unable to price on %s", self.name, cob_date)
             return None
 
+    def price_for_dates(self, market, model, dates):
+        return dates.apply(lambda dt: self.price(market, model, dt.date()))
+
     def hVar(self, market, model, cob_date, days=262):
         """Calculate the historical var for this fund on the given date.
 
@@ -80,9 +83,9 @@ class Fund(object):
                     by pandas logic
         :return:
         """
-        dates = bdate_range(end=cob_date, periods=days)
+        dates = bdate_range(end=cob_date, periods=days).to_series()
         log.info("Calculating hVar using date range [%s:%s]", dates[0].date(), dates[-1].date())
-        prices = dates.to_series().apply(lambda dt: self.price(market, model, dt.date()))
+        prices = self.price_for_dates(market, model, dates)
         return self.price(market, model, cob_date) - prices.dropna().quantile(.05)
 
 
